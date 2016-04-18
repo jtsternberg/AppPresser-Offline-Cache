@@ -1,0 +1,17 @@
+{
+  "generator-plugin-wp": {
+    "name": "AppPresser Offline Cache",
+    "homepage": "http://dsgnwrks.pro",
+    "description": "Adds functionality to allow AppPresser to download and use curated offline content.",
+    "version": "0.0.0",
+    "author": "jtsternberg",
+    "authoremail": "justin@dsgnwrks.pro",
+    "authorurl": "http://dsgnwrks.pro",
+    "license": "GPLv2",
+    "slug": "apppresser-offline-cache",
+    "classname": "AppPresser_Offline_Cache",
+    "classprefix": "APOC_",
+    "prefix": "app_oc",
+    "year": 2016
+  }
+}

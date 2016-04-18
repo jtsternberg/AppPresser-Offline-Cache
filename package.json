@@ -1,0 +1,27 @@
+{
+	"name": "apppresser-offline-cache",
+	"title": "AppPresser Offline Cache",
+	"version": "0.0.0",
+	"description": "Adds functionality to allow AppPresser to download and use curated offline content.",
+	"author": {
+		"name": "jtsternberg",
+		"url": "http://dsgnwrks.pro"
+	},
+	"license": "GPLv2",
+	"devDependencies": {
+		"grunt": "latest",
+		"grunt-contrib-watch": "latest",
+		"grunt-wp-i18n": "latest",
+		"grunt-contrib-copy": "latest",
+		"grunt-text-replace": "latest",
+		"grunt-contrib-clean": "latest",
+		"grunt-contrib-compress": "latest",
+		"grunt-wp-deploy": "latest",
+		"load-grunt-tasks": "latest"
+	},
+	"scripts": {
+		"test": "dockunit",
+		"preversion": "npm test",
+		"version": "grunt version && git add ."
+	}
+}
