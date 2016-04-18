@@ -161,8 +161,10 @@ class AppPresser_Offline_Cache {
 	 * @return void
 	 */
 	public function hooks() {
-		add_action( 'init', array( $this, 'init' ) );
-		$this->controllers->hooks();
+		if ( $this->check_requirements() ) {
+			add_action( 'init', array( $this, 'init' ) );
+			$this->controllers->hooks();
+		}
 	}
 
 	/**
@@ -192,9 +194,7 @@ class AppPresser_Offline_Cache {
 	 * @return void
 	 */
 	public function init() {
-		if ( $this->check_requirements() ) {
-			load_plugin_textdomain( 'apppresser-offline-cache', false, dirname( $this->basename ) . '/languages/' );
-		}
+		load_plugin_textdomain( 'apppresser-offline-cache', false, dirname( $this->basename ) . '/languages/' );
 	}
 
 	/**
@@ -239,7 +239,7 @@ class AppPresser_Offline_Cache {
 		// Do checks for required classes / functions
 		// function_exists('') & class_exists('').
 		// We have met all requirements.
-		return true;
+		return function_exists( 'rest_api_init' ) && class_exists( 'WP_REST_Posts_Controller' );
 	}
 
 	/**
@@ -251,8 +251,29 @@ class AppPresser_Offline_Cache {
 	public function requirements_not_met_notice() {
 		// Output our error.
 		echo '<div id="message" class="error">';
-		echo '<p>' . sprintf( __( 'AppPresser Offline Cache is missing requirements and has been <a href="%s">deactivated</a>. Please make sure all requirements are available.', 'apppresser-offline-cache' ), admin_url( 'plugins.php' ) ) . '</p>';
+		echo '<p>' . sprintf( __( 'AppPresser Offline Cache is missing requirements and has been <a href="%s">deactivated</a>. Please make sure all requirements are available. <em>Requirements include: At least WordPress 4.4, and the WordPress REST API plugin.</em>', 'apppresser-offline-cache' ), admin_url( 'plugins.php' ) ) . '</p>';
 		echo '</div>';
+	}
+
+	public function get_option( $key = false, $fallback = false ) {
+		if ( function_exists( 'appp_get_setting' ) ) {
+			return appp_get_setting( $key, $fallback );
+		}
+
+		// Otherwise, duplicate appp_get_setting functionality.
+		$settings = get_option( 'appp_settings' );
+		$value = $settings;
+
+		if ( $key ) {
+			$setting = isset( $settings[ $key ] ) ? $settings[ $key ] : false;
+			// Override value or supply fallback
+			$value = apply_filters( 'apppresser_setting_default', $setting, $key, $settings, $fallback );
+			if ( ! $value ) {
+				$value = $fallback;
+			}
+		}
+
+		return $value;
 	}
 
 	/**
