@@ -42,7 +42,7 @@
  * @param  string $class_name Name of the class being requested.
  * @return void
  */
-function app_oc_autoload_classes( $class_name ) {
+function appp_oc_autoload_classes( $class_name ) {
 	if ( 0 !== strpos( $class_name, 'APOC_' ) ) {
 		return;
 	}
@@ -54,7 +54,7 @@ function app_oc_autoload_classes( $class_name ) {
 
 	AppPresser_Offline_Cache::include_file( $filename );
 }
-spl_autoload_register( 'app_oc_autoload_classes' );
+spl_autoload_register( 'appp_oc_autoload_classes' );
 
 
 /**
@@ -109,6 +109,14 @@ class AppPresser_Offline_Cache {
 	protected static $single_instance = null;
 
 	/**
+	 * Instance of APOC_REST_Controllers
+	 *
+	 * @since NEXT
+	 * @var APOC_REST_Controllers
+	 */
+	protected $controllers;
+
+	/**
 	 * Creates or returns an instance of this class.
 	 *
 	 * @since  NEXT
@@ -143,7 +151,7 @@ class AppPresser_Offline_Cache {
 	 */
 	public function plugin_classes() {
 		// Attach other plugin classes to the base plugin class.
-		// $this->plugin_class = new APOC_Plugin_Class( $this );
+		$this->controllers = new APOC_REST_Controllers( $this );
 	} // END OF PLUGIN CLASSES FUNCTION
 
 	/**
@@ -153,8 +161,8 @@ class AppPresser_Offline_Cache {
 	 * @return void
 	 */
 	public function hooks() {
-
 		add_action( 'init', array( $this, 'init' ) );
+		$this->controllers->hooks();
 	}
 
 	/**
@@ -262,6 +270,7 @@ class AppPresser_Offline_Cache {
 			case 'basename':
 			case 'url':
 			case 'path':
+			case 'controllers':
 				return $this->$field;
 			default:
 				throw new Exception( 'Invalid '. __CLASS__ .' property: ' . $field );
@@ -317,12 +326,12 @@ class AppPresser_Offline_Cache {
  * @since  NEXT
  * @return AppPresser_Offline_Cache  Singleton instance of plugin class.
  */
-function app_oc() {
+function appp_oc() {
 	return AppPresser_Offline_Cache::get_instance();
 }
 
 // Kick it off.
-add_action( 'plugins_loaded', array( app_oc(), 'hooks' ) );
+add_action( 'plugins_loaded', array( appp_oc(), 'hooks' ) );
 
-register_activation_hook( __FILE__, array( app_oc(), '_activate' ) );
-register_deactivation_hook( __FILE__, array( app_oc(), '_deactivate' ) );
+register_activation_hook( __FILE__, array( appp_oc(), '_activate' ) );
+register_deactivation_hook( __FILE__, array( appp_oc(), '_deactivate' ) );

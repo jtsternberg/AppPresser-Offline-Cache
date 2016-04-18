@@ -11,7 +11,7 @@
     "slug": "apppresser-offline-cache",
     "classname": "AppPresser_Offline_Cache",
     "classprefix": "APOC_",
-    "prefix": "app_oc",
+    "prefix": "appp_oc",
     "year": 2016
   }
 }
