@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>My App (offline)</title>
+
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+
+		<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+
+		<link rel="stylesheet" type="text/css" href="../style.css">
+		<link rel="stylesheet" id="appp-style-css" href="theme/style.css" type="text/css" media="all">
+
+		<script type="text/javascript" src="../lib/jquery-2.1.4.min.js"></script>
+
+		<script type="text/javascript" src="../init.js"></script>
+		<script type="text/javascript" src="../connection.js"></script>
+	</head>
+
+	<body onload="onLoad()">
+
+	<div id="body-container">
+
+		<div id="menu-content" class="menu-content pane menu-animated">
+
+		<header class="bar bar-header">
+
+		<h1 class="title site-title">Offline</h1>
+
+		</header>
+
+		<div id="main" class="site-main" role="main">
+
+			<div id="content" class="site-content padding">
+
+				<!--
+
+				Start your content here
+
+				-->
+
+
+
+				<p>You are offline, please connect to the internet to continue using this app.</p>
+
+			<!--
+
+			End your content here
+
+			-->
+
+		</div><!-- #content -->
+
+        <div id="online-footer">
+            <div id="online-msg">Connection has been restored.</div>
+            <button class="button button-positive" id="go-online">Go Online</button>
+            <button class="button button-positive" id="close-online">Close</button>
+        </div>
+	</div><!-- #main -->
+
+	<script type="text/javascript" src="../cordova.js"></script>
+	<script type="text/javascript" src="theme/offline.js"></script>
+</body>
+</html>
