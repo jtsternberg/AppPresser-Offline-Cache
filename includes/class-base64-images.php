@@ -5,24 +5,18 @@
  * @package AppPresser Offline Cache
  */
 
-class APOC_Base64_Images {
+class APOC_Base64_Images extends APOC_Dom {
 
 	/**
 	 * Gets the image src/srcset values of html content.
 	 *
 	 * @since  NEXT
 	 *
-	 * @param  string $content HTML content.
-	 *
-	 * @return array           Array of image URLs
+	 * @return array Array of image URLs
 	 */
-	public function get_images( $content ) {
-		$dom = new DOMDocument;
-
-		@$dom->loadHTML( '<?xml encoding="UTF-8">' . $content );
-
+	public function get_images() {
 		$images = array();
-		foreach ( $dom->getElementsByTagName( 'img' ) as $image ) {
+		foreach ( $this->dom->getElementsByTagName( 'img' ) as $image ) {
 			if ( $src = $image->getAttributeNode( 'src' ) ) {
 				$images[] = $src->nodeValue;
 			}
@@ -64,6 +58,8 @@ class APOC_Base64_Images {
 			if ( ! $matches ) {
 				continue;
 			}
+
+			$url = $this->get_http_url( $url );
 
 			// Download file to temp location.
 			$file_tmp_name = download_url( $url );

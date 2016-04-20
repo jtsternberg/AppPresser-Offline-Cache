@@ -99,6 +99,11 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 			exit();
 		}
 
+		$resources = new APOC_Get_Resources( $response->data['html'] );
+
+		$response->data['scripts'] = $resources->get_scripts();
+		$response->data['stylesheets'] = $resources->get_stylesheets();
+
 		// Otherwise, return the response object.
 		return $response;
 	}
@@ -171,10 +176,10 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 	public function get_static_html( $url ) {
 		$html = wp_remote_retrieve_body( wp_remote_get( $url ) );
 
-		$converter = new APOC_Base64_Images;
+		$converter = new APOC_Base64_Images( $html );
 
 		// base64 the images.
-		if ( $images = $converter->base64_images( $converter->get_images( $html ) ) ) {
+		if ( $images = $converter->base64_images( $converter->get_images() ) ) {
 			$html = strtr( $html, $images );
 		}
 
