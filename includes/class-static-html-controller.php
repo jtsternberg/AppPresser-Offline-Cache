@@ -91,7 +91,8 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 		$post_id = (int) $request['id'];
 		$response = parent::get_item( $request );
 
-		$response->data['flush'] = $this->get_flush_date( $post_id );
+		$response->data['flush']        = $this->get_flush_date( $post_id );
+		$response->data['global_flush'] = $this->get_global_flush_date();
 
 		// Gets the static html output of the entire page.
 		$response->data['html'] = $this->get_static_html( $response->data['link'] );
@@ -143,8 +144,9 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 	 * @return WP_REST_Response           Modified response object.
 	 */
 	public function prepare_page( $data, $post, $request ) {
-		wp_die( '<xmp>$data: '. print_r( $data, true ) .'</xmp>' );
-		$data->data['flush'] = $this->get_flush_date( $post->ID );
+		$data->data['flush']        = $this->get_flush_date( $post->ID );
+		$data->data['global_flush'] = $this->get_global_flush_date();
+
 		return $data;
 	}
 
@@ -227,7 +229,28 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 	 * @return mixed         Result of get_post_meta call.
 	 */
 	protected function get_flush_date( $post_id ) {
-		return get_post_meta( $post_id, '_appp_do_flush', 1 );
+		return (string) get_post_meta( $post_id, '_appp_do_flush', 1 );
+	}
+
+	/**
+	 * Wrapper for get_option (appp_do_flush key)
+	 *
+	 * @since  NEXT
+	 *
+	 * @param  int  $post_id Post ID
+	 *
+	 * @return mixed         Result of get_option call.
+	 */
+	protected function get_global_flush_date() {
+		$flush_date = get_option( 'appp_do_flush' );
+
+		if ( ! $flush_date ) {
+			// set a baseline.
+			$flush_date = (string) strtotime( '-1 Day' );
+			add_option( 'appp_do_flush', $flush_date, null, 'no' );
+		}
+
+		return (string) $flush_date;
 	}
 
 }
