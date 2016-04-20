@@ -75,6 +75,8 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 	 */
 	public function get_items( $request ) {
 		add_filter( 'rest_page_query', array( $this, 'modify_query' ), 10, 2 );
+		add_filter( 'rest_prepare_page', array( $this, 'prepare_page' ), 10, 3 );
+
 		$response = parent::get_items( $request );
 		return $response;
 	}
@@ -86,7 +88,10 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 	 * @return WP_Error|WP_REST_Response
 	 */
 	public function get_item( $request ) {
+		$post_id = (int) $request['id'];
 		$response = parent::get_item( $request );
+
+		$response->data['flush'] = $this->get_flush_date( $post_id );
 
 		// Gets the static html output of the entire page.
 		$response->data['html'] = $this->get_static_html( $response->data['link'] );
@@ -101,13 +106,24 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 
 		$resources = new APOC_Get_Resources( $response->data['html'] );
 
-		$response->data['scripts'] = $resources->get_scripts();
+		$response->data['scripts']     = $resources->get_scripts();
 		$response->data['stylesheets'] = $resources->get_stylesheets();
 
 		// Otherwise, return the response object.
 		return $response;
 	}
 
+	/**
+	 * Filter the query arguments for a request.
+	 *
+	 * Enables adding extra arguments or setting defaults for a post
+	 * collection request.
+	 *
+	 * @param  array           $args    Key value array of query var to query value.
+	 * @param  WP_REST_Request $request The request used.
+	 *
+	 * @return array           $args    Modified query args.
+	 */
 	public function modify_query( $args, $request ) {
 		$whitelist = $this->plugin->get_option( 'offline-whitelist' );
 
@@ -115,6 +131,21 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 		$args['post__in'] = empty( $whitelist ) || ! is_array( $whitelist ) ? array( 0 ) : $whitelist;
 
 		return $args;
+	}
+
+	/**
+	 * Filter the post data for a response.
+	 *
+	 * @param  WP_REST_Response $response The response object.
+	 * @param  WP_Post          $post     Post object.
+	 * @param  WP_REST_Request  $request  Request object.
+	 *
+	 * @return WP_REST_Response           Modified response object.
+	 */
+	public function prepare_page( $data, $post, $request ) {
+		wp_die( '<xmp>$data: '. print_r( $data, true ) .'</xmp>' );
+		$data->data['flush'] = $this->get_flush_date( $post->ID );
+		return $data;
 	}
 
 	/**
@@ -158,7 +189,7 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 
 		// Provide canonical REST URL for accessing the full object
 		$new_links['canonical'] = array(
-			'href'   => rest_url( trailingslashit( $base ) . $post->ID ),
+			'href' => rest_url( trailingslashit( $base ) . $post->ID ),
 		);
 
 		return $new_links;
@@ -184,6 +215,19 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 		}
 
 		return $html;
+	}
+
+	/**
+	 * Wrapper for get_post_meta (_appp_do_flush key)
+	 *
+	 * @since  NEXT
+	 *
+	 * @param  int  $post_id Post ID
+	 *
+	 * @return mixed         Result of get_post_meta call.
+	 */
+	protected function get_flush_date( $post_id ) {
+		return get_post_meta( $post_id, '_appp_do_flush', 1 );
 	}
 
 }
