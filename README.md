@@ -10,7 +10,7 @@
 
 ## Description ##
 
-Adds functionality to allow AppPresser to download and use curated offline content.
+Adds WordPress REST API endpoints to allow AppPresser to download and use curated offline content.
 
 ## Installation ##
 

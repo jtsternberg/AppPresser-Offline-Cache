@@ -2,7 +2,7 @@
 /**
  * Plugin Name: AppPresser Offline Cache
  * Plugin URI:  http://dsgnwrks.pro
- * Description: Adds functionality to allow AppPresser to download and use curated offline content.
+ * Description: Adds WordPress REST API endpoints to allow AppPresser to download and use curated offline content.
  * Version:     0.0.0
  * Author:      jtsternberg
  * Author URI:  http://dsgnwrks.pro

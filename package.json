@@ -2,7 +2,7 @@
 	"name": "apppresser-offline-cache",
 	"title": "AppPresser Offline Cache",
 	"version": "0.0.0",
-	"description": "Adds functionality to allow AppPresser to download and use curated offline content.",
+	"description": "Adds WordPress REST API endpoints to allow AppPresser to download and use curated offline content.",
 	"author": {
 		"name": "jtsternberg",
 		"url": "http://dsgnwrks.pro"
