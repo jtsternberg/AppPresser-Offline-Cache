@@ -6,20 +6,14 @@
         <!-- Need this for Android with Crosswalk -->
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 
-        <!-- <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:; default-src 'self' *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *"> -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *">
 
         <link rel="stylesheet" type="text/css" href="style.css">
-
-        <script type="text/javascript">
-            var resturl = '<?php echo rest_url(); ?>';
-        </script>
 
         <script type="text/javascript" src="lib/jquery-2.1.4.min.js"></script>
 
         <!-- <script type="text/javascript" src="connection.js"></script> -->
         <!-- <script type="text/javascript" src="init.js"></script> -->
-        <script src="create-stylesheet.unwrapped-0.2.1.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/basket.js/0.5.2/basket.full.min.js"></script>
         <script type="text/javascript" src="cache.js"></script>
 
 
