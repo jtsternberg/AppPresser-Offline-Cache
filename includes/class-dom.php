@@ -15,6 +15,13 @@ abstract class APOC_Dom {
 	protected $dom;
 
 	/**
+	 * Content to parse
+	 *
+	 * @var string
+	 */
+	protected $content;
+
+	/**
 	 * Constructor
 	 *
 	 * @since NEXT
@@ -22,6 +29,7 @@ abstract class APOC_Dom {
 	 * @param string $content Content to parse.
 	 */
 	public function __construct( $content ) {
+		$this->content = $content;
 		$this->dom = $this->get( $content );
 	}
 
