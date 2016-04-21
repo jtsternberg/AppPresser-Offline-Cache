@@ -32,7 +32,7 @@ class APOC_Base64_Images extends APOC_Dom {
 	 * @param string  $tag_url        Tag's URL
 	 * @param boolean $get_attributes Ignored for images.
 	 */
-	protected function get_tag( &$tags, $tag, $tag_url, $get_attributes = false ) {
+	protected function get_tag( &$tags, DOMNode $tag, $tag_url, $get_attributes = false ) {
 		$tags[] = $tag_url;
 
 		if ( $srcset = $tag->getAttributeNode( 'srcset' ) ) {
@@ -55,7 +55,7 @@ class APOC_Base64_Images extends APOC_Dom {
 	 *
 	 * @return bool
 	 */
-	protected function should_use_tag( $tag ) {
+	protected function should_use_tag( DOMNode $tag ) {
 		$src = $tag->getAttributeNode( 'src' );
 
 		return $src ? $src->nodeValue : false;

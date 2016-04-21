@@ -42,7 +42,7 @@ class APOC_Get_Scripts extends APOC_Dom {
 	 *
 	 * @return bool
 	 */
-	protected function should_use_tag( $tag ) {
+	protected function should_use_tag( DOMNode $tag ) {
 		$src = $tag->getAttributeNode( 'src' );
 
 		return $src ? $src->nodeValue : false;

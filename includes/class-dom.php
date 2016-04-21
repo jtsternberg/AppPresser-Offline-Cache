@@ -140,7 +140,7 @@ abstract class APOC_Dom {
 	 * @param string  $tag_url        Tag's URL
 	 * @param boolean $get_attributes Whether to include all attributes, or just tag URL.
 	 */
-	protected function get_tag( &$tags, $tag, $tag_url, $get_attributes = false ) {
+	protected function get_tag( &$tags, DOMNode $tag, $tag_url, $get_attributes = false ) {
 		if ( ! $get_attributes ) {
 			$tags[] = $tag_url;
 		} else {
@@ -157,7 +157,7 @@ abstract class APOC_Dom {
 	 *
 	 * @return bool
 	 */
-	abstract protected function should_use_tag( $tag );
+	abstract protected function should_use_tag( DOMNode $tag );
 
 	/**
 	 * Gets tag attributes.
@@ -168,7 +168,7 @@ abstract class APOC_Dom {
 	 *
 	 * @return array        Array of tag attributes.
 	 */
-	protected function get_all_tag_attributes( $tag ) {
+	protected function get_all_tag_attributes( DOMNode $tag ) {
 		$tag_attrs = array();
 
 		foreach ( $tag->attributes as $attr ) {

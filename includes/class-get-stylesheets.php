@@ -42,7 +42,7 @@ class APOC_Get_Stylesheets extends APOC_Dom {
 	 *
 	 * @return bool
 	 */
-	protected function should_use_tag( $tag ) {
+	protected function should_use_tag( DOMNode $tag ) {
 		$rel = $tag->getAttributeNode( 'rel' );
 		$href = $tag->getAttributeNode( 'href' );
 
