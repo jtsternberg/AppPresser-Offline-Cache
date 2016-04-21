@@ -7,6 +7,10 @@
 
 class APOC_Base64_Images extends APOC_Dom {
 
+	protected $tag_name = 'img';
+	protected $tag_open = '<img';
+	protected $tag_close = '>';
+
 	/**
 	 * Gets the image src/srcset values of html content.
 	 *
@@ -15,23 +19,46 @@ class APOC_Base64_Images extends APOC_Dom {
 	 * @return array Array of image URLs
 	 */
 	public function get_images() {
-		$images = array();
-		foreach ( $this->dom->getElementsByTagName( 'img' ) as $image ) {
-			if ( $src = $image->getAttributeNode( 'src' ) ) {
-				$images[] = $src->nodeValue;
-			}
-			if ( $srcset = $image->getAttributeNode( 'srcset' ) ) {
-				$srcset = explode( ',', $srcset->nodeValue );
-				if ( ! empty( $srcset ) ) {
-					foreach ( $srcset as $url ) {
-						$url = explode( ' ', trim( $url ) );
-						$images[] = $url[0];
-					}
+		return $this->get_tags( false );
+	}
+
+	/**
+	 * Gets the image resource.
+	 *
+	 * @since  NEXT
+	 *
+	 * @param array   $tags           Tags we're returning. Passed by reference.
+	 * @param DOMNode $tag            DOMNode instance
+	 * @param string  $tag_url        Tag's URL
+	 * @param boolean $get_attributes Ignored for images.
+	 */
+	protected function get_tag( &$tags, $tag, $tag_url, $get_attributes = false ) {
+		$tags[] = $tag_url;
+
+		if ( $srcset = $tag->getAttributeNode( 'srcset' ) ) {
+			$srcset = explode( ',', $srcset->nodeValue );
+			if ( ! empty( $srcset ) ) {
+				foreach ( $srcset as $url ) {
+					$url = explode( ' ', trim( $url ) );
+					$tags[] = $url[0];
 				}
 			}
 		}
+	}
 
-		return $images;
+	/**
+	 * Determines if a script tag matches the correct pattern.
+	 *
+	 * @since  NEXT
+	 *
+	 * @param  DOMNode $tag DomNode instance
+	 *
+	 * @return bool
+	 */
+	protected function should_use_tag( $tag ) {
+		$src = $tag->getAttributeNode( 'src' );
+
+		return $src ? $src->nodeValue : false;
 	}
 
 	/**

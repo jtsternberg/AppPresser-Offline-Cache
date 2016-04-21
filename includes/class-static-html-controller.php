@@ -15,6 +15,27 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 	protected $parent_controller_data = array();
 
 	/**
+	 * Whether external script tags should be stripped from the HTML.
+	 *
+	 * @var boolean
+	 */
+	protected $remove_scripts = false;
+
+	/**
+	 * Whether external style tags should be stripped from the HTML.
+	 *
+	 * @var boolean
+	 */
+	protected $remove_stylesheets = false;
+
+	/**
+	 * Whether to replace images with base64 images to remove as dependencies.
+	 *
+	 * @var boolean
+	 */
+	protected $replace_images = false;
+
+	/**
 	 * Constructor
 	 *
 	 * @since  NEXT
@@ -33,6 +54,10 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 
 		$this->namespace = 'appp-offline/v1';
 		$this->rest_base = 'static-pages';
+
+		$this->remove_scripts     = isset( $_GET['remove_scripts'] );
+		$this->remove_stylesheets = isset( $_GET['remove_stylesheets'] );
+		$this->replace_images     = isset( $_GET['base64_images'] );
 
 		$base = sprintf( '/%s/%s', $this->namespace, $this->rest_base );
 	}
@@ -97,18 +122,33 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 		// Gets the static html output of the entire page.
 		$response->data['html'] = $this->get_static_html( $response->data['link'] );
 
-		// If requesting plain html,
-		if ( isset( $_GET['html'] ) ) {
-			// Spit it out in plain html.
-	 		header( 'Content-Type: text/html' );
-			echo $response->data['html'];
-			exit();
+		// $resources = new APOC_Get_Resources( $response->data['html'] );
+		$js = new APOC_Get_Scripts( $response->data['html'] );
+		$response->data['scripts']     = $js->get_scripts( $this->remove_scripts );
+
+		$css = new APOC_Get_Stylesheets( $response->data['html'] );
+		$response->data['stylesheets'] = $css->get_stylesheets( $this->remove_stylesheets );
+
+		if ( $this->remove_scripts ) {
+			$response->data['html'] = $js->remove_scripts();
 		}
 
-		$resources = new APOC_Get_Resources( $response->data['html'] );
+		if ( $this->remove_stylesheets ) {
+			$response->data['html'] = $css->remove_stylesheets();
+		}
 
-		$response->data['scripts']     = $resources->get_scripts();
-		$response->data['stylesheets'] = $resources->get_stylesheets();
+		$converter = new APOC_Base64_Images( $response->data['html'] );
+
+		// base64 the images.
+		$images = $converter->base64_images( $converter->get_images() );
+
+		if ( $this->replace_images && $images) {
+			$response->data['html'] = strtr( $response->data['html'], $images );
+			$response->data['images'] = array_keys( $images );
+		} else {
+			// base64 the images.
+			$response->data['images'] = $images;
+		}
 
 		// Otherwise, return the response object.
 		return $response;
@@ -208,13 +248,6 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 	 */
 	public function get_static_html( $url ) {
 		$html = wp_remote_retrieve_body( wp_remote_get( $url ) );
-
-		$converter = new APOC_Base64_Images( $html );
-
-		// base64 the images.
-		if ( $images = $converter->base64_images( $converter->get_images() ) ) {
-			$html = strtr( $html, $images );
-		}
 
 		return $html;
 	}

@@ -1,5 +1,7 @@
 <?php
 
+require_once 'test-base.php';
+
 class APOC_Base64_Images_Test extends BaseTest {
 
 	function test_class_exists() {
