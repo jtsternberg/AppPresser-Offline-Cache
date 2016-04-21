@@ -122,25 +122,26 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 		// Gets the static html output of the entire page.
 		$response->data['html'] = $this->get_static_html( $response->data['link'] );
 
-		// $resources = new APOC_Get_Resources( $response->data['html'] );
 		$js = new APOC_Get_Scripts( $response->data['html'] );
-		$response->data['scripts']     = $js->get_scripts( $this->remove_scripts );
 
-		$css = new APOC_Get_Stylesheets( $response->data['html'] );
-		$response->data['stylesheets'] = $css->get_stylesheets( $this->remove_stylesheets );
+		$response->data['scripts'] = $js->get_scripts( $this->remove_scripts );
 
 		if ( $this->remove_scripts ) {
 			$response->data['html'] = $js->remove_scripts();
 		}
 
+		$css = new APOC_Get_Stylesheets( $response->data['html'] );
+
+		$response->data['stylesheets'] = $css->get_stylesheets( $this->remove_stylesheets );
+
 		if ( $this->remove_stylesheets ) {
 			$response->data['html'] = $css->remove_stylesheets();
 		}
 
-		$converter = new APOC_Base64_Images( $response->data['html'] );
+		$image_converter = new APOC_Base64_Images( $response->data['html'] );
 
 		// base64 the images.
-		$images = $converter->base64_images( $converter->get_images() );
+		$images = $image_converter->base64_images( $image_converter->get_images() );
 
 		if ( $this->replace_images && $images) {
 			$response->data['html'] = strtr( $response->data['html'], $images );
