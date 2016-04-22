@@ -1,7 +1,7 @@
 # AppPresser Offline Cache #
 **Contributors:**      jtsternberg  
 **Donate link:**       http://dsgnwrks.pro  
-**Tags:**              REST API, WP-API, AppPresser, Offline
+**Tags:**              REST API, WP-API, AppPresser, Offline  
 **Requires at least:** 4.4  
 **Tested up to:**      4.4  
 **Stable tag:**        0.0.0  
