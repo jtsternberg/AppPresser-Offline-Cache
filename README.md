@@ -31,9 +31,9 @@ The indiviual page endpoint (`/wp-json/appp-offline/v1/static-pages/120`) will s
 
 Along with the new properties, the endpoint takes a few key query arguments:
 
-* `'remove_scripts'` - This argument will cause all externally linked scripts to be stripped from the `'html'` output.
-* `'remove_stylesheets'` - This argument will cause all externally linked stylesheets to be stripped from the `'html'` output.
-* `'base64_images'` - This argument will cause all images to be converted to base64-encoded images in the `'html'` output.
+* `remove_scripts` - This argument will cause all externally linked scripts to be stripped from the `'html'` output.
+* `remove_stylesheets` - This argument will cause all externally linked stylesheets to be stripped from the `'html'` output.
+* `base64_images` - This argument will cause all images to be converted to base64-encoded images in the `'html'` output.
 
 ### Offline App Demo
 
