@@ -197,7 +197,7 @@ class AppPresser_Offline_Cache {
 		load_plugin_textdomain( 'apppresser-offline-cache', false, dirname( $this->basename ) . '/languages/' );
 
 		if ( isset( $_GET['offline-demo'] ) ) {
-			wp_redirect( $this->url . 'offline-app-demo/?resturl=' . rest_url() );
+			wp_redirect( $this->url . 'offline-app-demo/index.html?resturl=' . rest_url() );
 			exit;
 		}
 	}
