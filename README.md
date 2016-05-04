@@ -51,6 +51,8 @@ There are 3 filters around the static html generation:
 * `'apppresser_offline_cache_static_html_request_url'` - The `$url` sent to `wp_remote_get()`. Uses the `'link'` value from the `WP_REST_Response` object.
 * `'apppresser_offline_cache_static_html_output'` - The html output from the `wp_remote_get()` response body.
 
+If you want to modify the response object further, you can use the WP-API filter, `'rest_post_dispatch'`.
+
 To have the static html requests be "logged-in" requests, you can use the `'apppresser_offline_cache_static_html_request_args'` filter. Keep in mind, this will only work if you are making an authenticated request to this endpoint.
 
 ```php
