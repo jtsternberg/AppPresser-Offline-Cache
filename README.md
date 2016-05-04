@@ -43,7 +43,7 @@ With your console still open, replace the `?resturl=<SITE-WITH-PLUGIN>.com/wp-js
 
 When you navigate to that new hash (you may actually need to refresh this once or twice.. Still a WIP), you should again see some [output in your console](http://b.ustin.co/QtFI). That's it! You're now viewing the offline-cached version of your page.
 
-### More filters
+### WordPress Filters
 
 There are 3 filters around the static html generation:
 
