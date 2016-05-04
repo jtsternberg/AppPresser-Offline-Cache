@@ -252,7 +252,7 @@ class APOC_Static_HTML_Controller extends WP_REST_Posts_Controller {
 		$url  = apply_filters( 'apppresser_offline_cache_static_html_request_url', $url );
 		$html = wp_remote_retrieve_body( wp_remote_get( $url, $args ) );
 
-		return apply_filters( 'apppresser_offline_cache_static_html_request_html', $html );
+		return apply_filters( 'apppresser_offline_cache_static_html_output', $html );
 	}
 
 	/**
