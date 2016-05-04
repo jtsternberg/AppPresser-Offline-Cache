@@ -43,6 +43,32 @@ With your console still open, replace the `?resturl=<SITE-WITH-PLUGIN>.com/wp-js
 
 When you navigate to that new hash (you may actually need to refresh this once or twice.. Still a WIP), you should again see some [output in your console](http://b.ustin.co/QtFI). That's it! You're now viewing the offline-cached version of your page.
 
+### More filters
+
+There are 3 filters around the static html generation:
+
+* `'apppresser_offline_cache_static_html_request_args'` - The `$args` array sent to `wp_remote_get()`.
+* `'apppresser_offline_cache_static_html_request_url'` - The `$url` sent to `wp_remote_get()`. Uses the `'link'` value from the `WP_REST_Response` object.
+* `'apppresser_offline_cache_static_html_request_html'` - The html output from the `wp_remote_get()` response body.
+
+To have the static html requests be "logged-in" requests, you can use the `'apppresser_offline_cache_static_html_request_args'` filter. Keep in mind, this will only work if you are making an authenticated request to this endpoint.
+
+```php
+add_filter( 'apppresser_offline_cache_static_html_request_args', function ( $args ) {
+​
+	$cookies = array();
+​
+	foreach ( $_COOKIE as $name => $value ) {
+		$cookies[] = new WP_Http_Cookie( array( 'name' => $name, 'value' => $value ) );
+	}
+​
+	$args = array( 'cookies' => $cookies );
+​
+	return $args;
+} );
+```
+_(credit [@scottbasgaard](https://github.com/scottbasgaard))_
+
 ## Installation ##
 
 ### Manual Installation ###
